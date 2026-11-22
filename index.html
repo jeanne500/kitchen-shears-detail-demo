@@ -88,6 +88,17 @@
   .card .d{font-size:15px;line-height:1.8;color:var(--ink3);}
   .card.big{background:var(--paper2);border-color:var(--brown2);}
 
+  /* 三样工具 */
+  .tools{display:grid;grid-template-columns:1fr;gap:12px;margin-top:22px;}
+  .tool{display:grid;grid-template-columns:56px 1fr;gap:14px;align-items:start;
+    background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;}
+  .tool .ii{width:56px;height:56px;border-radius:12px;background:var(--paper2);
+    display:flex;align-items:center;justify-content:center;}
+  .tool .ii svg{width:36px;height:36px;display:block;}
+  .tool .nm{font-size:18px;font-weight:700;color:var(--brown);margin:0 0 4px;letter-spacing:.5px;}
+  .tool .us{font-size:15px;line-height:1.75;color:var(--ink2);}
+  .tool .case{font-size:14px;line-height:1.7;color:var(--clay);margin-top:6px;}
+
   /* 对比 */
   .cmp{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:24px;}
   .cmp .box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:18px;text-align:center;}
@@ -149,7 +160,7 @@
         <button class="btn snd" id="mBtn" title="背景音乐">♪</button>
         <button class="btn snd" id="vBtn" title="人声讲解">人</button>
         <div class="bar" id="bar"><div class="fill" id="fill"></div></div>
-        <span class="tc" id="tc">00:00 / 00:22</span>
+        <span class="tc" id="tc">00:00 / 00:25</span>
       </div>
     </div>
 
@@ -170,9 +181,11 @@
     <div class="points">
       <div class="line"><b>① 锯齿刃</b>打滑的也能一刀切断</div>
       <div class="line"><b>② 可拆洗</b>两半拆开，缝里也洗得净</div>
-      <div class="line"><b>③ 大手柄</b>手没劲也握得住、开合省力</div>
-      <div class="line"><b>④ 开瓶器</b>自带开瓶拧盖，少找一样工具</div>
-      <div class="line"><b>⑤ 不锈钢</b>高碳钢刀刃，锋利不爱锈</div>
+      <div class="line"><b>③ 刃尖细长</b>贴着根剪，菜不压烂</div>
+      <div class="line"><b>④ 手柄夹口</b>老干妈这类小瓶盖，一夹就开</div>
+      <div class="line"><b>⑤ 尾部螺丝刀</b>锅盖柄松了，随手拧紧</div>
+      <div class="line"><b>⑥ 拉环起子</b>罐头拉环，一挑就开</div>
+      <div class="line"><b>⑦ 不锈钢刃</b>高碳钢刀刃，锋利不爱锈</div>
     </div>
     <p class="tiny">品牌：日本 下村工業（Shimomura）「味わい食房」系列 · 型号 A5K-403</p>
   </section>
@@ -223,11 +236,20 @@
       </div>
     </div>
     <p class="note" style="margin-top:18px;">转轴不是死的，两半直接拔开。刀根、转轴、齿缝都能冲干净，洗完摊开晾干，不积水、不藏脏、不生锈。</p>
+    <p class="tiny" style="margin-top:10px;">拆开是为了洗干净，装回去还是一把，别拆成两半单独使。</p>
+  </section>
+
+  <!-- 05 刃尖 -->
+  <section class="s">
+    <p class="kicker">四 · 刃 尖</p>
+    <h2 class="h">刃尖又细又长，<br>能贴着根剪，菜不压烂</h2>
+    <img class="figure mid" src="images_scissors/real_tip.jpg" alt="实拍：刃尖与刀身">
+    <p class="note" style="margin-top:18px;">刃尖收得细，剪菜根、剪虾须、剪葱段能一直剪到最根部；不像厚刃的剪子，一压就把菜压扁、出水。</p>
   </section>
 
   <!-- 05 大手柄对比 -->
   <section class="s">
-    <p class="kicker">四 · 大 手 柄</p>
+    <p class="kicker">五 · 大 手 柄</p>
     <h2 class="h">手柄大、指圈宽，<br>手没劲也握得住</h2>
     <div class="cmp">
       <div class="box bad">
@@ -259,17 +281,62 @@
     </div>
   </section>
 
-  <!-- 06 开瓶器 -->
+  <!-- 06 三样工具 -->
   <section class="s">
-    <p class="kicker">五 · 自带 开 瓶 器</p>
-    <h2 class="h">开瓶、拧盖，<br>一把就够，不用再翻抽屉</h2>
-    <img class="figure mid" src="images_scissors/jian_kai.jpg" alt="开瓶器开汽水瓶">
-    <p class="note" style="margin-top:18px;">手柄内侧带瓶盖起子。汽水瓶、酱菜瓶、调料瓶，手一滑拧不开的时候，不用喊人、不用用牙咬，这把直接搞定。</p>
+    <p class="kicker">六 · 一 把 顶 三 样</p>
+    <h2 class="h">手柄里藏了三样小工具，<br>不用再翻抽屉</h2>
+    <p class="note" style="margin-top:0;">不是笼统的“带开瓶器”。这把剪上有<b>三处</b>各管一件事，位置不同、用法也不同，买之前先分清。</p>
+    <div class="tools">
+      <div class="tool">
+        <div class="ii">
+          <svg viewBox="0 0 40 40" fill="none" stroke="#6b4a33" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="20" cy="22" r="11" fill="#efe7db"/>
+            <path d="M11 22c1.8-2 3.6 2 5.4 0s3.6 2 5.4 0 3.6 2 5.4 0" stroke="#b46a4a"/>
+            <path d="M20 8v3M17 6l3-2 3 2"/>
+          </svg>
+        </div>
+        <div>
+          <div class="nm">① 手柄夹口 · 拧瓶盖</div>
+          <div class="us">手柄内侧那圈波纹，是卡住瓶盖拧的。</div>
+          <div class="case">老干妈、酱菜、辣椒酱这类拧得紧的小瓶盖，夹住一转就开——不用垫毛巾，不用找人帮忙。</div>
+        </div>
+      </div>
+      <div class="tool">
+        <div class="ii">
+          <svg viewBox="0 0 40 40" fill="none" stroke="#6b4a33" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="16.5" y="4" width="7" height="16" rx="3" fill="#b46a4a" stroke="none"/>
+            <path d="M17 20h6v7h-6z" fill="#efe7db"/>
+            <path d="M15.5 27h9v4h-9z" fill="#6b4a33" stroke="none"/>
+          </svg>
+        </div>
+        <div>
+          <div class="nm">② 尾部一字螺丝刀 · 拧小螺丝</div>
+          <div class="us">手柄最尾端那个扁扁的一字头，是螺丝刀。</div>
+          <div class="case">锅盖中间的盖柄松了、眼镜腿松了、抽屉把手晃了——插进去一拧就紧，不用翻工具箱。</div>
+        </div>
+      </div>
+      <div class="tool">
+        <div class="ii">
+          <svg viewBox="0 0 40 40" fill="none" stroke="#6b4a33" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="7" y="13" width="26" height="16" rx="4" fill="#efe7db"/>
+            <ellipse cx="20" cy="21" rx="6.5" ry="4" fill="#fbf8f3"/>
+            <path d="M20 17v-4" stroke="#b46a4a"/>
+            <path d="M17 12.5h6" stroke="#b46a4a"/>
+          </svg>
+        </div>
+        <div>
+          <div class="nm">③ 拉环起子 · 撬罐头拉环</div>
+          <div class="us">尾端旁边那个小钩，是撬拉环用的。</div>
+          <div class="case">罐头、八宝粥、午餐肉的拉环，指甲抠不动、抠疼了，用它一挑就开。</div>
+        </div>
+      </div>
+    </div>
+    <p class="tiny" style="margin-top:16px;">三处位置不同，别混用：夹口拧盖、一字头拧螺丝、小钩撬拉环。</p>
   </section>
 
   <!-- 07 不锈钢 -->
   <section class="s">
-    <p class="kicker">六 · 刀 刃 材 质</p>
+    <p class="kicker">七 · 刀 刃 材 质</p>
     <h2 class="h">高碳不锈钢，<br>锋利，还不爱生锈</h2>
     <img class="figure mid" style="margin-bottom:18px;" src="images_scissors/real_blade.jpg" alt="刃口实拍刻字">
     <div class="card" style="margin-top:22px;">
@@ -281,7 +348,7 @@
 
   <!-- 08 三场景 -->
   <section class="s">
-    <p class="kicker">七 · 谁 都 能 用</p>
+    <p class="kicker">八 · 谁 都 能 用</p>
     <h2 class="h">不是“老年款”，<br>是全家人都顺手</h2>
     <div class="scenes row">
       <div class="scn">
@@ -302,7 +369,7 @@
 
   <!-- 09 参数 -->
   <section class="s">
-    <p class="kicker">八 · 参 数 与 说 明</p>
+    <p class="kicker">九 · 参 数 与 说 明</p>
     <h2 class="h">买之前，<br>把这几列看清楚</h2>
     <table>
       <tr><th>品名</th><td>厨房剪（キッチンはさみ）</td></tr>
@@ -310,7 +377,7 @@
       <tr><th>型号</th><td>A5K-403</td></tr>
       <tr><th>刀刃</th><td>高碳不锈钢（HIGH CARBON STAINLESS STEEL），一面锯齿刃</td></tr>
       <tr><th>手柄</th><td>ABS 树脂，耐热温度 80℃</td></tr>
-      <tr><th>特点</th><td>可拆分清洗 · 自带开瓶器 · 大手柄</td></tr>
+      <tr><th>特点</th><td>锯齿刃 · 可拆分清洗 · 刃尖细长 · 手柄夹口拧盖 · 尾部螺丝刀 · 拉环起子</td></tr>
       <tr><th>产地</th><td>中国制造（包装标注 MADE IN CHINA）</td></tr>
       <tr><th>品牌出品</th><td>下村工業株式会社 · 日本新潟</td></tr>
     </table>
@@ -349,10 +416,11 @@
     { d:3.0, bg:'images_scissors/jian_cover.jpg', cap:'01 顺手的厨房剪', html:'<div class="in"><div style="font-size:1.5em;color:#fff;font-family:var(--serif);">做饭，先趁手</div></div>', say:'一把顺手的厨房剪，做饭能省不少劲。' },
     { d:3.2, bg:'images_scissors/jian_qie.jpg', cap:'02 锯齿刃', html:'<div class="in"></div>', say:'锯齿刃，番茄、肉皮，打滑的也能一刀切。' },
     { d:3.2, bg:'images_scissors/jian_xi.jpg', cap:'03 可拆洗', html:'<div class="in"></div>', say:'两半能拆开，转轴缝里也洗得干净。' },
-    { d:3.0, cap:'04 大手柄', bg:'', html:'<div class="in">'+SVG_OPEN+'<div style="font-size:.7em;color:#f4efe6;letter-spacing:.1em;margin-top:.4em;">手柄大 · 指圈宽</div></div>', say:'手柄大、指圈宽，手没劲也握得住。' },
-    { d:3.0, bg:'images_scissors/jian_kai.jpg', cap:'05 开瓶器', html:'<div class="in"></div>', say:'自带开瓶器，开汽水瓶不用再找工具。' },
-    { d:3.0, cap:'06 不锈钢', bg:'', html:'<div class="in"><div style="font-size:.78em;color:#f4efe6;font-family:var(--serif);letter-spacing:.06em;">HIGH CARBON<br>STAINLESS STEEL</div></div>', say:'高碳不锈钢，锋利，还不爱生锈。' },
-    { d:3.2, bg:'images_scissors/jian_chufang.jpg', cap:'07 全家都顺手', html:'<div class="in"></div>', say:'不是只给长辈用，全家人都顺手。' }
+    { d:3.0, bg:'images_scissors/real_tip.jpg', cap:'04 刃尖', html:'<div class="in"></div>', say:'刃尖又细又长，能贴着根剪，菜不压烂。' },
+    { d:3.0, cap:'05 大手柄', bg:'', html:'<div class="in">'+SVG_OPEN+'<div style="font-size:.7em;color:#f4efe6;letter-spacing:.1em;margin-top:.4em;">手柄大 · 指圈宽</div></div>', say:'手柄大、指圈宽，手没劲也握得住。' },
+    { d:3.4, bg:'images_scissors/real_cover.jpg', cap:'06 一把顶三样', html:'<div class="in"></div>', say:'手柄夹口拧瓶盖，尾部一字螺丝刀拧螺丝，小钩撬拉环。' },
+    { d:3.0, cap:'07 不锈钢', bg:'', html:'<div class="in"><div style="font-size:.78em;color:#f4efe6;font-family:var(--serif);letter-spacing:.06em;">HIGH CARBON<br>STAINLESS STEEL</div></div>', say:'高碳不锈钢，锋利，还不爱生锈。' },
+    { d:3.2, bg:'images_scissors/jian_chufang.jpg', cap:'08 全家都顺手', html:'<div class="in"></div>', say:'不是只给长辈用，全家人都顺手。' }
   ];
   var total = SCENES.reduce(function(a,b){return a+b.d;},0);
   var layers = [], subs = [];
