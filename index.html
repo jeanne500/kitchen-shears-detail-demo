@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>厨房剪 · 商品详情页</title>
+<style>
+  :root{
+    --paper:#f4efe6; --paper2:#efe7db; --card:#fbf8f3;
+    --ink:#2f2a25; --ink2:#544b42; --ink3:#8c7f71;
+    --brown:#6b4a33; --brown2:#8a6547; --clay:#b46a4a;
+    --line:#ddd0be;
+    --serif:"Songti SC","STSong","Source Han Serif SC","Noto Serif CJK SC",serif;
+    --sans:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    /* 俏皮轻松：仅用 macOS 系统自带字体，不引入外部字体文件，规避版权风险 */
+    --fun:"Yuanti SC","HanziPen SC","Wawati SC","PingFang SC",sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:#e9e2d6;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;}
+  .page{max-width:760px;margin:0 auto;background:var(--paper);
+    background-image:radial-gradient(circle at 14% 3%,rgba(255,255,255,.6),transparent 58%);}
+
+  .draft{background:#f7d9dc;color:#7a2e33;font-size:13px;line-height:1.8;padding:11px 22px;letter-spacing:.3px;}
+  .draft b{font-weight:700;}
+
+  section.s{padding:54px 42px;border-bottom:1px solid var(--line);}
+  .kicker{font-size:13px;letter-spacing:6px;color:var(--brown2);font-weight:600;margin:0 0 16px;}
+  .h{font-family:var(--serif);font-size:42px;line-height:1.38;margin:0 0 18px;letter-spacing:2px;}
+  .note{font-size:18px;line-height:1.95;color:var(--ink2);margin:0;letter-spacing:.4px;}
+  .tiny{font-size:14px;color:var(--ink3);line-height:1.9;margin:14px 0 0;letter-spacing:.3px;}
+
+  /* 首屏 */
+  .hero{padding:46px 42px 56px;border-bottom:1px solid var(--line);}
+  .hero .h{font-size:46px;}
+  .hero .sub{font-size:22px;line-height:1.85;color:var(--brown);margin:6px 0 0;letter-spacing:1px;font-weight:600;}
+  .hero p.lead{font-size:18px;line-height:1.95;color:var(--ink2);margin:22px 0 0;}
+  /* 品牌 slogan：圆体、俏皮轻松，居中作点缀，不抢主标题 */
+  .slogan{font-family:var(--fun);text-align:center;font-size:21px;color:var(--clay);
+    letter-spacing:4px;margin:2px 0 20px;line-height:1.6;}
+  .slogan::before,.slogan::after{content:"";display:inline-block;width:20px;height:1px;
+    background:var(--line);vertical-align:middle;margin:0 12px;}
+  .points{margin-top:30px;border-top:1px solid var(--line);}
+  .line{border-bottom:1px solid var(--line);padding:13px 0;font-size:17px;line-height:1.7;}
+  .line:last-child{border-bottom:0;}
+  .line b{display:inline-block;width:112px;color:var(--brown);font-size:14px;letter-spacing:1px;font-weight:700;}
+
+  /* 播放器（与时钟同款） */
+  .player{position:relative;margin:0 0 20px;border-radius:8px;overflow:hidden;background:#1e1a17;}
+  .stage{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;cursor:pointer;background:#2a231d;font-size:16px;}
+  .sc{position:absolute;inset:0;opacity:0;transition:opacity .55s ease;background-size:cover;background-position:center;}
+  .sc.on{opacity:1;}
+  .sc::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(to top,rgba(18,14,11,.82) 0%,rgba(18,14,11,.18) 48%,rgba(18,14,11,.02) 100%);}
+  .sc .in{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 1.4em;}
+  .sc .cap{position:absolute;left:1.1em;top:.8em;z-index:3;font-size:.58em;letter-spacing:.12em;color:rgba(255,255,255,.82);
+    background:rgba(12,9,7,.4);padding:.22em .7em;border-radius:.3em;}
+  .sub{position:absolute;left:50%;bottom:.85em;transform:translateX(-50%);z-index:4;max-width:88%;text-align:center;
+    font-size:.62em;line-height:1.65;color:#fff;background:rgba(12,9,7,.5);padding:.3em .95em;border-radius:.35em;letter-spacing:.04em;}
+  .bigplay{position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;background:rgba(20,16,13,.28);transition:opacity .4s;}
+  .bigplay.hide{opacity:0;pointer-events:none;}
+  .bigplay .ring{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 30px rgba(0,0,0,.35);}
+  .bigplay .tri{width:0;height:0;border-style:solid;border-width:13px 0 13px 22px;border-color:transparent transparent transparent var(--brown);margin-left:4px;}
+  .bigplay .hint{position:absolute;left:0;right:0;top:calc(50% + 52px);text-align:center;font-size:13px;color:rgba(250,245,236,.85);letter-spacing:1px;}
+  .ctrl{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#211b16;}
+  .btn{width:32px;height:32px;border-radius:50%;border:0;background:#f4efe6;color:var(--brown);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;flex:0 0 32px;}
+  .btn .tri{width:0;height:0;border-style:solid;border-width:7px 0 7px 12px;border-color:transparent transparent transparent var(--brown);margin-left:2px;}
+  .btn .pausebar{display:flex;gap:3px;}
+  .btn .pausebar i{width:3px;height:13px;background:var(--brown);border-radius:1px;display:block;}
+  .btn.snd{font-size:13px;color:#f4efe6;background:transparent;letter-spacing:0;}
+  .btn.snd.off{opacity:.32;text-decoration:line-through;}
+  .bar{flex:1;height:6px;background:#3c322a;border-radius:3px;overflow:hidden;position:relative;min-width:60px;}
+  .bar .fill{height:100%;width:0;background:var(--clay);border-radius:3px;}
+  .tc{color:#d8cdbf;font-size:12px;font-variant-numeric:tabular-nums;letter-spacing:.5px;flex:0 0 auto;}
+
+  /* 通用图 */
+  .figure{width:100%;border-radius:6px;display:block;}
+  .figure.mid{aspect-ratio:4/3;object-fit:cover;}
+  .figure.wide{aspect-ratio:16/9;object-fit:cover;}
+  .figure.sm{aspect-ratio:1/1;object-fit:cover;}
+
+  /* 痛点三宫格 */
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:22px 18px;}
+  .card .ic{font-size:34px;line-height:1;margin-bottom:12px;}
+  .card .t{font-size:19px;font-weight:700;color:var(--brown);margin-bottom:8px;letter-spacing:.5px;}
+  .card .d{font-size:15px;line-height:1.8;color:var(--ink3);}
+  .card.big{background:var(--paper2);border-color:var(--brown2);}
+
+  /* 对比 */
+  .cmp{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:24px;}
+  .cmp .box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:18px;text-align:center;}
+  .box.bad{border-color:#c9a99a;background:#f3e7e0;}
+  .box.good{border-color:var(--brown2);background:var(--paper2);}
+  .cmp .box .sv{width:80%;max-width:170px;height:auto;display:block;margin:0 auto 10px;}
+  .cmp .box .tag{font-size:13px;letter-spacing:1px;margin-bottom:6px;}
+  .box.bad .tag{color:#9a5b46;} .box.good .tag{color:var(--brown);font-weight:700;}
+  .cmp .box .desc{font-size:14px;line-height:1.7;color:var(--ink2);}
+
+  /* 三场景卡 */
+  .scenes{margin-top:26px;}
+  .row{display:grid;grid-template-columns:1fr;gap:12px;}
+  .scn{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:18px 20px;}
+  .scn .who{font-size:18px;font-weight:700;color:var(--brown);margin-bottom:6px;}
+  .scn .what{font-size:15px;line-height:1.8;color:var(--ink2);}
+
+  /* 参数表 */
+  table{width:100%;border-collapse:collapse;margin-top:22px;font-size:16px;}
+  th,td{text-align:left;padding:13px 10px;border-bottom:1px solid var(--line);}
+  th{width:32%;color:var(--brown);font-weight:600;letter-spacing:.5px;}
+  td{color:var(--ink2);}
+
+  .final{padding:60px 42px 70px;text-align:center;}
+  .final .big{font-family:var(--serif);font-size:34px;line-height:1.55;color:var(--brown);margin:0 0 18px;letter-spacing:2px;}
+  .final p{font-size:17px;line-height:1.9;color:var(--ink2);margin:0;}
+  .sign{margin-top:36px;font-size:12px;color:var(--ink3);letter-spacing:2px;}
+
+  .realgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;}
+  .realgrid img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:5px;display:block;filter:saturate(.85) contrast(.98);}
+
+  @media (max-width:560px){
+    section.s,.hero{padding:40px 22px;}
+    .final{padding:48px 22px 58px;}
+    .h{font-size:31px;} .hero .h{font-size:34px;}
+    .hero .sub{font-size:18px;}
+    .slogan{font-size:17px;letter-spacing:3px;}
+    .grid3{grid-template-columns:1fr;}
+    .cmp{grid-template-columns:1fr;}
+    .line b{display:block;width:auto;margin-bottom:2px;}
+    .draft{padding:10px 16px;font-size:12px;}
+  }
+  @media print{
+    body{background:#fff;} .draft{display:none;}
+    section.s{page-break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- 01 封面 + 视频 -->
+  <section class="hero">
+    <div class="slogan">美好生活轻松一点</div>
+    <div class="player">
+      <div class="stage" id="stage"></div>
+      <div class="ctrl">
+        <button class="btn" id="pp" aria-label="播放"><span class="tri" id="ppIcon"></span></button>
+        <button class="btn snd" id="mBtn" title="背景音乐">♪</button>
+        <button class="btn snd" id="vBtn" title="人声讲解">人</button>
+        <div class="bar" id="bar"><div class="fill" id="fill"></div></div>
+        <span class="tc" id="tc">00:00 / 00:22</span>
+      </div>
+    </div>
+
+    <h1 class="h">厨房剪，<br>也该换一把顺手的了</h1>
+    <p class="sub">握得稳 · 剪得动 · 好清洗</p>
+    <p class="lead">给长辈用着省力，全家人也通用。一把剪，厨房大半的活都能对付。</p>
+
+    <img class="figure wide" style="margin-top:28px;" src="images_scissors/jian_cover.jpg" alt="厨房剪">
+    <div style="margin-top:16px;">
+      <p style="font-size:15px;color:var(--ink3);letter-spacing:1px;margin:0 0 10px;">实物拍摄</p>
+      <div class="realgrid">
+        <img src="images_scissors/real_cover.jpg" alt="剪刀实物">
+        <img src="images_scissors/real_blade.jpg" alt="锯齿刀刃">
+        <img src="images_scissors/real_pkg.jpg" alt="产品包装">
+      </div>
+    </div>
+
+    <div class="points">
+      <div class="line"><b>① 锯齿刃</b>打滑的也能一刀切断</div>
+      <div class="line"><b>② 可拆洗</b>两半拆开，缝里也洗得净</div>
+      <div class="line"><b>③ 大手柄</b>手没劲也握得住、开合省力</div>
+      <div class="line"><b>④ 开瓶器</b>自带开瓶拧盖，少找一样工具</div>
+      <div class="line"><b>⑤ 不锈钢</b>高碳钢刀刃，锋利不爱锈</div>
+    </div>
+    <p class="tiny">品牌：日本 下村工業（Shimomura）「味わい食房」系列 · 型号 A5K-403</p>
+  </section>
+
+  <!-- 02 痛点 -->
+  <section class="s">
+    <p class="kicker">一 · 先 看 痛 点</p>
+    <h2 class="h">厨房里这三种“剪不动”，<br>你家八成也遇过</h2>
+    <div class="grid3">
+      <div class="card">
+        <div class="ic">🍅</div>
+        <div class="t">一压就打滑</div>
+        <div class="d">切番茄、肉皮、保鲜膜、药板，普通剪刀一压就滑，切不断还容易划到手。</div>
+      </div>
+      <div class="card">
+        <div class="ic">🦠</div>
+        <div class="t">缝里藏污洗不到</div>
+        <div class="d">转轴是死的，菜渣血水卡在缝里，越用越有味、还生锈，老人眼神差更看不见。</div>
+      </div>
+      <div class="card">
+        <div class="ic">✊</div>
+        <div class="t">手柄小、捏不动</div>
+        <div class="d">指圈卡手、握不住，剪两三下就累；手劲小的长辈，常常剪到一半就放弃。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 锯齿刃 -->
+  <section class="s">
+    <p class="kicker">二 · 锯 齿 刃</p>
+    <h2 class="h">打滑的东西，<br>也能一刀切断</h2>
+    <img class="figure mid" src="images_scissors/jian_qie.jpg" alt="锯齿刃剪番茄">
+    <p class="note" style="margin-top:18px;">刀刃一面带细锯齿，咬住食材不打滑。番茄、带皮肉、葱、保鲜膜、铝箔——不用反复磨、不用使劲压，一刀就断。</p>
+  </section>
+
+  <!-- 04 可拆洗 -->
+  <section class="s">
+    <p class="kicker">三 · 可 拆 洗</p>
+    <h2 class="h">两半一拔就开，<br>每个角落都洗得到</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div>
+        <img class="figure" style="aspect-ratio:4/3;object-fit:cover;" src="images_scissors/real_split.jpg" alt="实拍：两半拆开">
+        <p class="tiny" style="margin-top:8px;">实拍：两半可拆开</p>
+      </div>
+      <div>
+        <img class="figure" style="aspect-ratio:4/3;object-fit:cover;" src="images_scissors/jian_xi.jpg" alt="拆开冲洗">
+        <p class="tiny" style="margin-top:8px;">拆开后冲洗干净</p>
+      </div>
+    </div>
+    <p class="note" style="margin-top:18px;">转轴不是死的，两半直接拔开。刀根、转轴、齿缝都能冲干净，洗完摊开晾干，不积水、不藏脏、不生锈。</p>
+  </section>
+
+  <!-- 05 大手柄对比 -->
+  <section class="s">
+    <p class="kicker">四 · 大 手 柄</p>
+    <h2 class="h">手柄大、指圈宽，<br>手没劲也握得住</h2>
+    <div class="cmp">
+      <div class="box bad">
+        <svg class="sv" viewBox="0 0 100 130" aria-hidden="true">
+          <g fill="none" stroke="#b08a78" stroke-width="5" stroke-linecap="round">
+            <path d="M50 62 L30 20 M50 62 L70 20"/>
+            <circle cx="30" cy="20" r="9" fill="#e7d2c6"/><circle cx="70" cy="20" r="9" fill="#e7d2c6"/>
+            <circle cx="30" cy="100" r="11" fill="#e7d2c6"/><circle cx="70" cy="100" r="11" fill="#e7d2c6"/>
+            <path d="M30 100 L50 62 L70 100"/>
+          </g>
+          <circle cx="50" cy="62" r="4" fill="#6b4a33"/>
+        </svg>
+        <div class="tag">普通小剪刀</div>
+        <div class="desc">指圈紧、卡手指，握力全压在指尖，剪几下就酸。</div>
+      </div>
+      <div class="box good">
+        <svg class="sv" viewBox="0 0 100 130" aria-hidden="true">
+          <g fill="none" stroke="#6b4a33" stroke-width="5" stroke-linecap="round">
+            <path d="M50 60 L28 18 M50 60 L72 18"/>
+            <ellipse cx="28" cy="18" rx="12" ry="10" fill="#efe7db"/><ellipse cx="72" cy="18" rx="12" ry="10" fill="#efe7db"/>
+            <ellipse cx="26" cy="102" rx="16" ry="12" fill="#efe7db"/><ellipse cx="74" cy="102" rx="16" ry="12" fill="#efe7db"/>
+            <path d="M26 102 L50 60 L74 102"/>
+          </g>
+          <circle cx="50" cy="60" r="5" fill="#6b4a33"/>
+        </svg>
+        <div class="tag">这一把</div>
+        <div class="desc">手柄宽大、指圈宽松，手掌吃住力，握得稳，开合顺，剪久了也不累。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 开瓶器 -->
+  <section class="s">
+    <p class="kicker">五 · 自带 开 瓶 器</p>
+    <h2 class="h">开瓶、拧盖，<br>一把就够，不用再翻抽屉</h2>
+    <img class="figure mid" src="images_scissors/jian_kai.jpg" alt="开瓶器开汽水瓶">
+    <p class="note" style="margin-top:18px;">手柄内侧带瓶盖起子。汽水瓶、酱菜瓶、调料瓶，手一滑拧不开的时候，不用喊人、不用用牙咬，这把直接搞定。</p>
+  </section>
+
+  <!-- 07 不锈钢 -->
+  <section class="s">
+    <p class="kicker">六 · 刀 刃 材 质</p>
+    <h2 class="h">高碳不锈钢，<br>锋利，还不爱生锈</h2>
+    <img class="figure mid" style="margin-bottom:18px;" src="images_scissors/real_blade.jpg" alt="刃口实拍刻字">
+    <div class="card" style="margin-top:22px;">
+      <div style="font-size:13px;letter-spacing:2px;color:var(--brown2);margin-bottom:10px;">刃口实拍刻字</div>
+      <div style="font-family:var(--serif);font-size:24px;letter-spacing:1px;color:var(--ink);">HIGH CARBON STAINLESS STEEL</div>
+      <p class="note" style="margin-top:14px;">高碳不锈钢刀刃，硬度够、保持锋利的时间长；日常水洗不易锈。手柄为 ABS 树脂，耐热 80℃，轻巧不坠手。</p>
+    </div>
+  </section>
+
+  <!-- 08 三场景 -->
+  <section class="s">
+    <p class="kicker">七 · 谁 都 能 用</p>
+    <h2 class="h">不是“老年款”，<br>是全家人都顺手</h2>
+    <div class="scenes row">
+      <div class="scn">
+        <div class="who">👵 给长辈</div>
+        <div class="what">握力下降、手指不灵活也能轻松剪；打滑的食材不费劲，开瓶不用求人——少一件让爸妈为难的小事。</div>
+      </div>
+      <div class="scn">
+        <div class="who">👩 给宝妈</div>
+        <div class="what">给宝宝剪辅食、剪面条、剪肉，锯齿不滑、拆洗干净，接触宝宝入口的东西更放心。</div>
+      </div>
+      <div class="scn">
+        <div class="who">🍳 日常厨房</div>
+        <div class="what">剪菜、剪肉、开包装、剪葱花、处理海鲜，一把顶替好几样工具，抽屉里清爽一半。</div>
+      </div>
+    </div>
+    <img class="figure wide" style="margin-top:24px;" src="images_scissors/jian_chufang.jpg" alt="居家厨房">
+  </section>
+
+  <!-- 09 参数 -->
+  <section class="s">
+    <p class="kicker">八 · 参 数 与 说 明</p>
+    <h2 class="h">买之前，<br>把这几列看清楚</h2>
+    <table>
+      <tr><th>品名</th><td>厨房剪（キッチンはさみ）</td></tr>
+      <tr><th>品牌 / 系列</th><td>日本 下村工業 Shimomura · 味わい食房 AJIWAI</td></tr>
+      <tr><th>型号</th><td>A5K-403</td></tr>
+      <tr><th>刀刃</th><td>高碳不锈钢（HIGH CARBON STAINLESS STEEL），一面锯齿刃</td></tr>
+      <tr><th>手柄</th><td>ABS 树脂，耐热温度 80℃</td></tr>
+      <tr><th>特点</th><td>可拆分清洗 · 自带开瓶器 · 大手柄</td></tr>
+      <tr><th>产地</th><td>中国制造（包装标注 MADE IN CHINA）</td></tr>
+      <tr><th>品牌出品</th><td>下村工業株式会社 · 日本新潟</td></tr>
+    </table>
+    <p class="tiny">说明：本品为日本品牌设计、中国制造，如实标注，不冒充“日本进口”。</p>
+  </section>
+
+  <!-- 10 收尾 -->
+  <section class="final">
+    <p class="big">一把顺手的剪刀，<br>能让做饭轻松一点。</p>
+    <p>握得稳、剪得动、好清洗——给爸妈，也给自己。</p>
+    <p class="sign">厨 房 剪 · 商 品 详 情 页</p>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  var STAGE = document.getElementById('stage');
+  var PP = document.getElementById('pp'), ICON = document.getElementById('ppIcon');
+  var MBTN = document.getElementById('mBtn'), VBTN = document.getElementById('vBtn');
+  var FILL = document.getElementById('fill'), TC = document.getElementById('tc'), BAR = document.getElementById('bar');
+  var big = document.createElement('div');
+  big.className = 'bigplay';
+  big.innerHTML = '<div class="ring"><span class="tri"></span></div><div class="hint">点击播放 · 含人声讲解</div>';
+  STAGE.appendChild(big);
+
+  var SVG_OPEN = '<svg viewBox="0 0 120 140" width="10em" height="11.6em" aria-hidden="true">'
+    + '<g fill="none" stroke="#f4efe6" stroke-width="5" stroke-linecap="round">'
+    + '<path d="M60 66 L34 20 M60 66 L86 20"/>'
+    + '<ellipse cx="34" cy="20" rx="13" ry="10" fill="rgba(244,239,230,.18)"/><ellipse cx="86" cy="20" rx="13" ry="10" fill="rgba(244,239,230,.18)"/>'
+    + '<ellipse cx="32" cy="110" rx="19" ry="13" fill="rgba(244,239,230,.18)"/><ellipse cx="88" cy="110" rx="19" ry="13" fill="rgba(244,239,230,.18)"/>'
+    + '<path d="M32 110 L60 66 L88 110"/></g>'
+    + '<circle cx="60" cy="66" r="5" fill="#f4efe6"/></svg>';
+
+  var SCENES = [
+    { d:3.0, bg:'images_scissors/jian_cover.jpg', cap:'01 顺手的厨房剪', html:'<div class="in"><div style="font-size:1.5em;color:#fff;font-family:var(--serif);">做饭，先趁手</div></div>', say:'一把顺手的厨房剪，做饭能省不少劲。' },
+    { d:3.2, bg:'images_scissors/jian_qie.jpg', cap:'02 锯齿刃', html:'<div class="in"></div>', say:'锯齿刃，番茄、肉皮，打滑的也能一刀切。' },
+    { d:3.2, bg:'images_scissors/jian_xi.jpg', cap:'03 可拆洗', html:'<div class="in"></div>', say:'两半能拆开，转轴缝里也洗得干净。' },
+    { d:3.0, cap:'04 大手柄', bg:'', html:'<div class="in">'+SVG_OPEN+'<div style="font-size:.7em;color:#f4efe6;letter-spacing:.1em;margin-top:.4em;">手柄大 · 指圈宽</div></div>', say:'手柄大、指圈宽，手没劲也握得住。' },
+    { d:3.0, bg:'images_scissors/jian_kai.jpg', cap:'05 开瓶器', html:'<div class="in"></div>', say:'自带开瓶器，开汽水瓶不用再找工具。' },
+    { d:3.0, cap:'06 不锈钢', bg:'', html:'<div class="in"><div style="font-size:.78em;color:#f4efe6;font-family:var(--serif);letter-spacing:.06em;">HIGH CARBON<br>STAINLESS STEEL</div></div>', say:'高碳不锈钢，锋利，还不爱生锈。' },
+    { d:3.2, bg:'images_scissors/jian_chufang.jpg', cap:'07 全家都顺手', html:'<div class="in"></div>', say:'不是只给长辈用，全家人都顺手。' }
+  ];
+  var total = SCENES.reduce(function(a,b){return a+b.d;},0);
+  var layers = [], subs = [];
+  SCENES.forEach(function(s){
+    var d = document.createElement('div');
+    d.className = 'sc';
+    if(s.bg) d.style.backgroundImage = "url('"+s.bg+"')";
+    else d.style.background = 'linear-gradient(135deg,#3a2f26,#241d17)';
+    var cap = document.createElement('div'); cap.className='cap'; cap.textContent = s.cap;
+    d.appendChild(cap);
+    var inner = document.createElement('div'); inner.innerHTML = s.html;
+    d.appendChild(inner);
+    var sub = document.createElement('div'); sub.className='sub'; sub.style.display='none'; sub.textContent = s.say;
+    d.appendChild(sub);
+    STAGE.appendChild(d);
+    layers.push(d); subs.push(sub);
+  });
+
+  function fit(){ STAGE.style.fontSize = Math.max(10, STAGE.clientWidth/40) + 'px'; }
+  var t=0, timer=null, playing=false, cur=-1, musicOn=true, voiceOn=true;
+  function fmt(s){ s=Math.floor(s); var m=Math.floor(s/60), x=s%60; return (m<10?'0':'')+m+':'+(x<10?'0':'')+x; }
+  function paint(){
+    var acc=0, idx=0;
+    for(var i=0;i<SCENES.length;i++){ if(t < acc+SCENES[i].d){ idx=i; break;} acc+=SCENES[i].d; }
+    if(t>=total) idx = SCENES.length-1;
+    for(var k=0;k<layers.length;k++){ layers[k].classList.toggle('on', k===idx); }
+    if(idx!==cur){
+      cur=idx;
+      if(voiceOn){ speak(SCENES[idx].say); }
+      subs.forEach(function(el,i){ el.style.display = (i===idx)?'block':'none'; });
+    }
+    FILL.style.width = Math.min(100, t/total*100) + '%';
+    TC.textContent = fmt(t) + ' / ' + fmt(Math.ceil(total));
+  }
+  function speak(txt){
+    if(!('speechSynthesis' in window) || !txt) return;
+    try{
+      speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(txt);
+      u.lang='zh-CN'; u.rate=0.96; u.pitch=1.02;
+      var vs = speechSynthesis.getVoices();
+      for(var i=0;i<vs.length;i++){ if(/zh[-_]CN/i.test(vs[i].lang)){ u.voice=vs[i]; break; } }
+      speechSynthesis.speak(u);
+    }catch(e){}
+  }
+  function pad(n){return n<10?'0'+n:''+n;}
+  // 钢琴底乐
+  var AC=null, master=null, seqTimer=null, step=0;
+  var scale = [261.63,293.66,329.63,392.00,440.00,523.25,587.33,659.25]; // C 大调
+  function ensureAC(){
+    if(AC) return AC;
+    try{
+      AC = new (window.AudioContext||window.webkitAudioContext)();
+      master = AC.createGain(); master.gain.value = 0.06; master.connect(AC.destination);
+    }catch(e){}
+    return AC;
+  }
+  function note(freq, when, dur){
+    if(!AC) return;
+    var o = AC.createOscillator(), g = AC.createGain();
+    o.type='triangle'; o.frequency.value=freq;
+    var lp = AC.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=2200;
+    o.connect(lp); lp.connect(g); g.connect(master);
+    g.gain.setValueAtTime(0.0001, when);
+    g.gain.exponentialRampToValueAtTime(0.5, when+0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, when+dur);
+    o.start(when); o.stop(when+dur+0.02);
+  }
+  function startMusic(){
+    var c = ensureAC(); if(!c) return;
+    if(c.state==='suspended') c.resume();
+    if(seqTimer) return;
+    step=0;
+    seqTimer = setInterval(function(){
+      var now = AC.currentTime;
+      var b = scale[(step*2)%scale.length];
+      note(b, now, 0.5);
+      if(step%2===0) note(scale[(step*5)%scale.length]/2, now, 0.6);
+      step++;
+    }, 560);
+  }
+  function stopMusic(){ if(seqTimer){ clearInterval(seqTimer); seqTimer=null; } }
+  function play(){
+    if(playing) return;
+    if(t>=total) t=0;
+    playing=true; big.classList.add('hide');
+    ICON.className='pausebar'; ICON.innerHTML='<i></i><i></i>';
+    if(musicOn) startMusic();
+    paint();
+    timer = setInterval(function(){
+      t += 0.05;
+      if(t >= total){ t = total; paint(); stop(); return; }
+      paint();
+    }, 50);
+  }
+  function stop(){
+    playing=false; if(timer){ clearInterval(timer); timer=null; }
+    ICON.className='tri'; ICON.innerHTML='';
+    big.classList.remove('hide');
+    if('speechSynthesis' in window) speechSynthesis.cancel();
+    stopMusic();
+  }
+  PP.addEventListener('click', function(e){ e.stopPropagation(); playing?stop():play(); });
+  STAGE.addEventListener('click', function(){ playing?stop():play(); });
+  BAR.addEventListener('click', function(e){
+    var r = BAR.getBoundingClientRect();
+    var p = (e.clientX - r.left)/r.width;
+    t = Math.max(0, Math.min(total, p*total)); cur=-1; paint();
+  });
+  MBTN.addEventListener('click', function(e){
+    e.stopPropagation(); musicOn=!musicOn; MBTN.classList.toggle('off', !musicOn);
+    if(!musicOn) stopMusic(); else if(playing) startMusic();
+  });
+  VBTN.addEventListener('click', function(e){
+    e.stopPropagation(); voiceOn=!voiceOn; VBTN.classList.toggle('off', !voiceOn);
+    if(!voiceOn && 'speechSynthesis' in window) speechSynthesis.cancel();
+    else if(playing && cur>=0) speak(SCENES[cur].say);
+  });
+  if('speechSynthesis' in window){ speechSynthesis.onvoiceschanged = function(){}; }
+  window.addEventListener('resize', fit); fit(); paint();
+
+  document.querySelectorAll('img').forEach(function(img){
+    img.addEventListener('error', function(){ this.style.background='#e6d8c6'; this.removeAttribute('src'); });
+  });
+})();
+</script>
+</body>
+</html>
